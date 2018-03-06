@@ -1,2 +1,1 @@
-# mxnet_tutorials
-MXNet Tutorials
+# MXNet Tutorials
