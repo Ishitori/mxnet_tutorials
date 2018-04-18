@@ -14,3 +14,4 @@
 ## U-Net
 ![Samples from Facade Dataset](img/unet2.png)
 
+![UNet layers](img/unet_layers.png)
