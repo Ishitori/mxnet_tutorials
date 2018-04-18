@@ -22,3 +22,6 @@
 ![Pix2Pix Discriminator Training](img/pix2pix_discriminator_training.png)
 ### Training the generator
 ![Pix2Pix Generator Training](img/pix2pix_generator_training.png)
+
+## High and low frequency
+![Frequencies in image](img/freq.png)
