@@ -15,3 +15,10 @@
 ![Samples from Facade Dataset](img/unet2.png)
 
 ![UNet layers](img/unet_layers.png)
+
+## Training loop
+
+### Training the discriminator
+![Pix2Pix Discriminator Training](img/pix2pix_discriminator_training.png)
+### Training the generator
+![Pix2Pix Generator Training](img/pix2pix_generator_training.png)
