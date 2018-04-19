@@ -40,6 +40,9 @@ class Activation(mx.gluon.HybridBlock):
         return F.Custom(x, op_type='relu')
 
 class Conv2D(mx.gluon.HybridBlock):
+    
+    outputs = {}
+    
     def __init__(self, channels, kernel_size, strides=(1, 1), padding=(0, 0),
                  dilation=(1, 1), groups=1, layout='NCHW',
                  activation=None, use_bias=True, weight_initializer=None,
@@ -53,6 +56,6 @@ class Conv2D(mx.gluon.HybridBlock):
 
     def hybrid_forward(self, F, x):
         out = self.conv(x)
-        self.output = out.asnumpy()
+        Conv2D.outputs[self._prefix[:-1]] = out.asnumpy()
         return out
 
