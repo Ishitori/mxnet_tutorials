@@ -24,7 +24,6 @@ def get_positive_negative_saliency(gradient):
     return pos_saliency, neg_saliency
 
 def save_class_activation_on_image(org_img, activation_map, file_name):
-
     # Grayscale activation map
     path_to_file = file_name+'_Cam_Grayscale.jpg'
     cv2.imwrite(path_to_file, activation_map)
