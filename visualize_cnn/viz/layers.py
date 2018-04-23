@@ -41,7 +41,8 @@ class Activation(mx.gluon.HybridBlock):
 
 class Conv2D(mx.gluon.HybridBlock):
 
-    outputs = {}
+    conv_output = None
+    capture_layer_name = None
 
     def __init__(self, channels, kernel_size, strides=(1, 1), padding=(0, 0),
                  dilation=(1, 1), groups=1, layout='NCHW',
@@ -52,11 +53,15 @@ class Conv2D(mx.gluon.HybridBlock):
                              dilation=dilation, groups=groups, layout=layout,
                              activation=activation, use_bias=use_bias, weight_initializer=weight_initializer,
                              bias_initializer=bias_initializer, in_channels=in_channels)
-        self.output = None
 
     def hybrid_forward(self, F, x):
         out = self.conv(x)
-        out.attach_grad()
-        Conv2D.outputs[self._prefix[:-1]] = out
+        name = self._prefix[:-1]
+        if name == Conv2D.capture_layer_name:
+            out.attach_grad()
+            Conv2D.conv_output = out
         return out
+
+def set_capture_layer_name(name):
+    Conv2D.capture_layer_name = name
 
