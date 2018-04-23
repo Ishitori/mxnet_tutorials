@@ -4,6 +4,9 @@ from mxnet.gluon.block import HybridBlock
 from mxnet.gluon import nn
 from mxnet.gluon.model_zoo import model_store
 
+from mxnet.gluon.nn import MaxPool2D, Flatten, Dense, Dropout
+from cnnviz.layers import Activation, Conv2D
+
 import numpy as np
 
 class AlexNet(HybridBlock):
@@ -14,11 +17,11 @@ class AlexNet(HybridBlock):
             with self.features.name_scope():
                 self.features.add(Conv2D(64, kernel_size=11, strides=4, padding=2))
                 self.features.add(Activation('relu'))
-                self.features.add(nn.MaxPool2D(pool_size=3, strides=2))
+                self.features.add(MaxPool2D(pool_size=3, strides=2))
                 
                 self.features.add(Conv2D(192, kernel_size=5, padding=2))
                 self.features.add(Activation('relu'))
-                self.features.add(nn.MaxPool2D(pool_size=3, strides=2))
+                self.features.add(MaxPool2D(pool_size=3, strides=2))
                 
                 self.features.add(Conv2D(384, kernel_size=3, padding=1))
                 self.features.add(Activation('relu'))
@@ -28,19 +31,19 @@ class AlexNet(HybridBlock):
                 
                 self.features.add(Conv2D(256, kernel_size=3, padding=1))
                 self.features.add(Activation('relu'))
-                self.features.add(nn.MaxPool2D(pool_size=3, strides=2))
+                self.features.add(MaxPool2D(pool_size=3, strides=2))
                 
-                self.features.add(nn.Flatten())
+                self.features.add(Flatten())
 
-                self.features.add(nn.Dense(4096))
+                self.features.add(Dense(4096))
                 self.features.add(Activation('relu'))
-                self.features.add(nn.Dropout(0.5))
+                self.features.add(Dropout(0.5))
 
-                self.features.add(nn.Dense(4096))
+                self.features.add(Dense(4096))
                 self.features.add(Activation('relu'))
-                self.features.add(nn.Dropout(0.5))
+                self.features.add(Dropout(0.5))
 
-            self.output = nn.Dense(classes)
+            self.output = Dense(classes)
 
     def hybrid_forward(self, F, x):
         x = self.features(x)
@@ -64,4 +67,3 @@ def preprocess(data):
                                     std=mx.nd.array([0.229, 0.224, 0.225]))
     data = mx.nd.transpose(data, (2,0,1))
     return data
-
