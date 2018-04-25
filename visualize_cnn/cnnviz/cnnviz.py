@@ -1,5 +1,8 @@
 import mxnet as mx
+from mxnet import autograd
 import numpy as np
+
+from cnnviz.layers import Conv2D
 
 def _get_grad(net, image, class_id=None, conv_layer_name=None, image_grad=False):
 
