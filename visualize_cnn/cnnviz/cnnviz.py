@@ -4,16 +4,18 @@ from mxnet import autograd
 import numpy as np
 import cv2
 
-from cnnviz.layers import Conv2D
+from cnnviz.layers import Conv2D, Activation
 
 def _get_grad(net, image, class_id=None, conv_layer_name=None, image_grad=False):
 
     if image_grad:
         image.attach_grad()
         Conv2D.capture_layer_name = None
+        Activation.set_guided_backprop(True)
     else:
         # Tell convviz.Conv2D which layer's output and gradient needs to be recorded
         Conv2D.capture_layer_name = conv_layer_name
+        Activation.set_guided_backprop(False)
     
     # Run the network
     with autograd.record(train_mode=False):

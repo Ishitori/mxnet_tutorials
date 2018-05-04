@@ -5,18 +5,27 @@ from mxnet import autograd
 from mxnet.gluon import nn
 
 class ReluOp(mx.operator.CustomOp):
+
+    guided_backprop = True
+
     def forward(self, is_train, req, in_data, out_data, aux):
         x = in_data[0]
         y = nd.maximum(x, nd.zeros_like(x))
         self.assign(out_data[0], req[0], y)
 
     def backward(self, req, out_grad, in_data, out_data, in_grad, aux):
-        y = out_data[0]
-        dy = out_grad[0]
-        dy_positives = nd.maximum(dy, nd.zeros_like(dy))
-        y_ones = y.__gt__(0)
-        dx = dy_positives * y_ones
-        self.assign(in_grad[0], req[0], mx.nd.array(dx))
+        if ReluOp.guided_backprop:
+            y = out_data[0]
+            dy = out_grad[0]
+            dy_positives = nd.maximum(dy, nd.zeros_like(dy))
+            y_ones = y.__gt__(0)
+            dx = dy_positives * y_ones
+            self.assign(in_grad[0], req[0], dx)
+        else:
+            x = in_data[0]
+            x_gt_zero = x.__gt__(0)
+            dx = out_grad[0] * x_gt_zero
+            self.assign(in_grad[0], req[0], dx)
 
 @mx.operator.register("relu")
 class ReluProp(mx.operator.CustomOpProp):
@@ -32,6 +41,10 @@ class ReluProp(mx.operator.CustomOpProp):
         return ReluOp()  
 
 class Activation(mx.gluon.HybridBlock):
+    @staticmethod
+    def set_guided_backprop(mode=True):
+        ReluOp.guided_backprop = mode
+
     def __init__(self, act_type, **kwargs):
         assert act_type == 'relu'
         super(Activation, self).__init__(**kwargs)
