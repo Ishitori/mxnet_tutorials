@@ -42,7 +42,7 @@ class ReluProp(mx.operator.CustomOpProp):
 
 class Activation(mx.gluon.HybridBlock):
     @staticmethod
-    def set_guided_backprop(mode=True):
+    def set_guided_backprop(mode=False):
         ReluOp.guided_backprop = mode
 
     def __init__(self, act_type, **kwargs):
