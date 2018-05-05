@@ -67,7 +67,7 @@ def get_guided_grad_cam(cam, imggrad):
     return np.multiply(cam, imggrad)
 
 def get_img_heatmap(orig_img, activation_map):
-    heatmap = cv2.applyColorMap(activation_map, cv2.COLORMAP_COOL)
+    heatmap = cv2.applyColorMap(activation_map, cv2.COLORMAP_HSV)
     heatmap = cv2.cvtColor(heatmap, cv2.COLOR_BGR2RGB)
     orig_img = cv2.resize(orig_img, (orig_img.shape[0], orig_img.shape[1]))
 
